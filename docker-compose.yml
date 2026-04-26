@@ -35,6 +35,8 @@ services:
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: my_db
+    ports:
+      - "8070:8070"
     volumes:
       - ./app:/app
     networks:
