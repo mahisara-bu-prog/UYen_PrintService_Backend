@@ -26,7 +26,7 @@ from tokens import (
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-DATABASE_URL = "mysql+pymysql://root@mysql_db:3306/my_db"
+DATABASE_URL = "mysql+pymysql://root:root@mysql:3306/my_db"
 
 # =========================
 # 🔹 Database Setup
