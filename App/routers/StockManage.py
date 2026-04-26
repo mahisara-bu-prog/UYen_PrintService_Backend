@@ -74,7 +74,65 @@ def update_material(
     db.commit()
 
     return {"message": "Material updated"}
+# =========================
+# 🔹 GET ALL MATERIALS
+# =========================
+@router.get("/materials", response_model=list[MaterialResponse])
+def get_all_materials(
+    db: Session = Depends(get_db),
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
+):
+    materials = db.query(Material).all()
 
+    result = []
+    for m in materials:
+        props = db.query(MaterialProperty).filter(
+            MaterialProperty.material_id == m.material_id
+        ).all()
+
+        result.append({
+            "material_id": m.material_id,
+            "material_name": m.material_name,
+            "category": m.category,
+            "unit": m.unit,
+            "price_per_unit": m.price_per_unit,
+            "quantity": m.quantity,
+            "threshold": m.threshold,
+            "status": get_status(m),  # ✅ your logic reused
+            "properties": props
+        })
+
+    return result
+
+# =========================
+# 🔹 GET ONE MATERIAL
+# =========================
+@router.get("/materials/{material_id}", response_model=MaterialResponse)
+def get_material(
+    material_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
+):
+    material = db.query(Material).get(material_id)
+
+    if not material:
+        raise HTTPException(status_code=404, detail="Material not found")
+
+    props = db.query(MaterialProperty).filter(
+        MaterialProperty.material_id == material.material_id
+    ).all()
+
+    return {
+        "material_id": material.material_id,
+        "material_name": material.material_name,
+        "category": material.category,
+        "unit": material.unit,
+        "price_per_unit": material.price_per_unit,
+        "quantity": material.quantity,
+        "threshold": material.threshold,
+        "status": get_status(material),
+        "properties": props
+    }
 
 # =========================
 # 🔹 DELETE MATERIAL

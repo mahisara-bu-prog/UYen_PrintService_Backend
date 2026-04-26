@@ -19,6 +19,38 @@ router = APIRouter(
     tags=["Staff"]
 )
 
+@router.post("/staff_register", response_model=StaffResponse)
+def create_staff(
+    staff: StaffCreate,
+    db: Session = Depends(get_db),
+    current_user = Depends(require_role(["Admin", "Owner"]))  # 🔐 PROTECTION
+):
+
+    # ✅ Check duplicate email
+    if db.query(Staff).filter(Staff.email == staff.email).first():
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    # ✅ Check duplicate username
+    if db.query(Staff).filter(Staff.user_name == staff.user_name).first():
+        raise HTTPException(status_code=400, detail="Username already taken")
+
+    # ✅ Create new staff
+    new_staff = Staff(
+        name=staff.name,
+        email=staff.email,
+        phone=staff.phone,
+        user_name=staff.user_name,
+        password_hashed= staff.password,  # 🔐 FIXED
+        user_role=staff.user_role.value,
+        user_status=True
+    )
+
+    db.add(new_staff)
+    db.commit()
+    db.refresh(new_staff)
+
+    return new_staff
+
 # =========================
 # 🔹 Login (Staff)
 # =========================

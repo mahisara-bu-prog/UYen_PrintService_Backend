@@ -147,3 +147,27 @@ class MaterialUpdate(BaseModel):
 
 class StockAction(BaseModel):
     amount: int
+
+# =========================
+# 🔹 Material Property Response
+# =========================
+class MaterialPropertyResponse(BaseModel):
+    property_name: str
+    property_value: str
+
+    class Config:
+        from_attributes = True
+
+class MaterialResponse(BaseModel):
+    material_id: int
+    material_name: str
+    category: str
+    unit: str
+    price_per_unit: float
+    quantity: int
+    threshold: int
+    status: str
+    properties: List[MaterialPropertyResponse]
+
+    class Config:
+        from_attributes = True
