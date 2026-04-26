@@ -9,6 +9,7 @@ services:
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_DATABASE: my_db
     ports:
       - "3306:3306"
