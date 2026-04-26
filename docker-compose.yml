@@ -2,35 +2,42 @@ version: "3.9"
 
 services:
 
-  fastapi:
-    build: .
-    container_name: fastapi_app
-    restart: always
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: mydb
-    volumes:
-      - ./app:/app
-    networks:
-      - backend
-
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: mysql
     restart: always
     environment:
+      MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: my_db
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      retries: 5
+
+  fastapi:
+    build: .
+    container_name: fastapi_app
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: my_db
+    volumes:
+      - ./app:/app
+    networks:
+      - backend
+
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -40,7 +47,8 @@ services:
       - mysql
     environment:
       PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
+      PMA_USER: root
+      PMA_PASSWORD: root
     ports:
       - "8080:80"
     networks:
