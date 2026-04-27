@@ -2,11 +2,10 @@
 #!! For Database Work Only
 
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime ,ForeignKey,Text,Date ,DECIMAL ,TIMESTAMP
+from sqlalchemy import Column, Integer, String, Boolean, DateTime ,ForeignKey,Text,Date ,DECIMAL ,TIMESTAMP 
 from sqlalchemy.sql import func
 from sqlalchemy.orm import declarative_base ,relationship
 from datetime import datetime, timezone,UTC
-
 Base = declarative_base()
 
 
@@ -201,3 +200,43 @@ class MaterialProperty(Base):
     property_value = Column(String(100))
 
     material = relationship("Material", back_populates="properties")
+
+    __tablename__ = "material_transactions"
+
+    transaction_id = Column(Integer, primary_key=True, index=True)
+
+    material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
+
+    # ✅ now using username
+    username = Column(String(50), nullable=False)
+
+    action_type = Column(
+        Enum("withdraw", "receive", name="action_type_enum"),
+        nullable=False
+    )
+
+    amount = Column(Integer, nullable=False)
+    note = Column(Text)
+
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+
+
+class MaterialTransaction(Base):
+    __tablename__ = "material_transactions"
+
+    transaction_id = Column(Integer, primary_key=True, index=True)
+
+    material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
+
+    # ✅ now using username
+    username = Column(String(50), nullable=False)
+
+    action_type = Column(
+        Enum("withdraw", "receive", name="action_type_enum"),
+        nullable=False
+    )
+
+    amount = Column(Integer, nullable=False)
+    note = Column(Text)
+
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))

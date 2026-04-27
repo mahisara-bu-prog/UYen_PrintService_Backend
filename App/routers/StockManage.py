@@ -162,7 +162,7 @@ def withdraw_material(
     material_id: int,
     action: StockAction,
     db: Session = Depends(get_db),
-    user=Depends(require_role(["Staff", "Admin", "Owner"]))  # ✅ added auth
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
 ):
     material = db.query(Material).get(material_id)
 
@@ -172,13 +172,28 @@ def withdraw_material(
     if material.quantity < action.amount:
         raise HTTPException(status_code=400, detail="Not enough stock")
 
+    # 🔒 SAFETY CHECK (IMPORTANT)
+    #if action.username != user["username"]:
+    #    raise HTTPException(status_code=403, detail="Username mismatch")
+
+    # ✅ Update stock
     material.quantity -= action.amount
+
+    # ✅ Log transaction
+    transaction = MaterialTransaction(
+        material_id=material_id,
+        username=action.username,
+        action_type="withdraw",
+        amount=action.amount,
+        note=action.note
+    )
+
+    db.add(transaction)
     db.commit()
 
     return {
         "message": "Stock withdrawn",
-        "new_quantity": material.quantity,
-        "status": get_status(material)
+        "new_quantity": material.quantity
     }
 
 
@@ -190,18 +205,33 @@ def receive_material(
     material_id: int,
     action: StockAction,
     db: Session = Depends(get_db),
-    user=Depends(require_role(["Staff", "Admin", "Owner"]))  # ✅ added auth
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
 ):
     material = db.query(Material).get(material_id)
 
     if not material:
         raise HTTPException(status_code=404, detail="Material not found")
 
+    # 🔒 SAFETY CHECK
+    #if action.username != user["username"]:
+    #    raise HTTPException(status_code=403, detail="Username mismatch")
+
+    # ✅ Update stock
     material.quantity += action.amount
+
+    # ✅ Log transaction
+    transaction = MaterialTransaction(
+        material_id=material_id,
+        username=action.username,
+        action_type="receive",
+        amount=action.amount,
+        note=action.note
+    )
+
+    db.add(transaction)
     db.commit()
 
     return {
         "message": "Stock received",
-        "new_quantity": material.quantity,
-        "status": get_status(material)
+        "new_quantity": material.quantity
     }

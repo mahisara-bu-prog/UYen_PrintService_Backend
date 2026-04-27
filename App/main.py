@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, Session
-from routers import StaffMan, Customers,StockManage ,OrderMan
+from routers import StaffMan, Customers,StockManage ,OrderMan ,report
 from models import *
 from schemas import *
 from database import get_db
@@ -81,6 +81,7 @@ app.include_router(StaffMan.router)
 app.include_router(Customers.router)
 app.include_router(StockManage.router)
 app.include_router(OrderMan.router)
+app.include_router(report.router)
 @app.get("/")
 def root():
     return {"message": "API is running"}

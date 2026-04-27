@@ -171,3 +171,9 @@ class MaterialResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class StockAction(BaseModel):
+    amount: int
+    note: Optional[str] = None
+    username: str
+

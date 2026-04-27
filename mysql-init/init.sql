@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2026 at 09:58 AM
+-- Generation Time: Apr 27, 2026 at 12:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -72,7 +72,7 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`material_id`, `material_name`, `category`, `unit`, `price_per_unit`, `quantity`, `threshold`, `created_at`, `updated_at`) VALUES
-(1, 'Paper A4 Plain', 'Paper', 'Reem', 250.00, 20, 5, '2026-04-25 09:54:19', '2026-04-25 15:26:51'),
+(1, 'Paper A4 Plain', 'Paper', 'Reem', 250.00, 29, 5, '2026-04-25 09:54:19', '2026-04-27 08:47:20'),
 (3, 'A5 Glossy Paper', 'Paper', 'Reem', 250.00, 20, 5, '2026-04-25 10:01:34', '2026-04-25 10:01:34');
 
 -- --------------------------------------------------------
@@ -95,6 +95,30 @@ CREATE TABLE `material_properties` (
 INSERT INTO `material_properties` (`property_id`, `material_id`, `property_name`, `property_value`) VALUES
 (1, 3, 'Size', 'A5'),
 (2, 3, 'Type', 'Glossy');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `material_transactions`
+--
+
+CREATE TABLE `material_transactions` (
+  `transaction_id` int(11) NOT NULL,
+  `material_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `action_type` enum('withdraw','receive') NOT NULL,
+  `amount` int(11) NOT NULL,
+  `note` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `material_transactions`
+--
+
+INSERT INTO `material_transactions` (`transaction_id`, `material_id`, `username`, `action_type`, `amount`, `note`, `created_at`) VALUES
+(1, 1, 'netto', 'withdraw', 1, 'Give the fuck outta here', '2026-04-27 08:45:59'),
+(2, 1, 'netto', 'receive', 20, 'Just get its free', '2026-04-27 08:47:18');
 
 -- --------------------------------------------------------
 
@@ -215,7 +239,9 @@ INSERT INTO `staff_users` (`USER_ID`, `NAME`, `Email`, `Phone_No`, `username`, `
 (1, 'Mahisara', 'netto@bu.ac.th', '0123456789', 'netto', '123456789', 'Admin', 1, '2026-03-25 03:11:54', '2026-04-13 23:24:35'),
 (2, 'jame bond', 'jb007@example.com', '087456921368', 'jamebond007', 'mi666', 'Staff', 0, '2026-03-26 12:57:15', '2026-04-14 08:36:02'),
 (3, 'Mahisara', 'mahinet666@example.com', '089654763', 'netto_2', '@123456', 'Staff', 1, '2026-03-30 13:37:26', '2026-04-25 06:23:31'),
-(6, 'neymar', 'neymar123@hotmail.net', '099 - 999 - 9999', 'neymar123', 'ney12345', 'Owner', 1, '2026-04-13 15:20:46', '2026-04-13 15:20:46');
+(6, 'neymar', 'neymar123@hotmail.net', '099 - 999 - 9999', 'neymar123', 'ney12345', 'Owner', 1, '2026-04-13 15:20:46', '2026-04-13 15:20:46'),
+(7, 'somethings', 'paperse@example.com', '0862576325', 'paperrex123', '@vct2020', 'Admin', 1, '2026-04-26 10:00:29', '2026-04-26 10:00:29'),
+(8, 'jason', 'orangecat@example.com', '098765235', 'forsakenfern', '@456789', 'Admin', 1, '2026-04-26 12:01:23', '2026-04-26 12:01:23');
 
 -- --------------------------------------------------------
 
@@ -251,6 +277,13 @@ ALTER TABLE `materials`
 --
 ALTER TABLE `material_properties`
   ADD PRIMARY KEY (`property_id`),
+  ADD KEY `material_id` (`material_id`);
+
+--
+-- Indexes for table `material_transactions`
+--
+ALTER TABLE `material_transactions`
+  ADD PRIMARY KEY (`transaction_id`),
   ADD KEY `material_id` (`material_id`);
 
 --
@@ -320,6 +353,12 @@ ALTER TABLE `material_properties`
   MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `material_transactions`
+--
+ALTER TABLE `material_transactions`
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
@@ -347,7 +386,7 @@ ALTER TABLE `pricing`
 -- AUTO_INCREMENT for table `staff_users`
 --
 ALTER TABLE `staff_users`
-  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `walkin_sessions`
@@ -364,6 +403,12 @@ ALTER TABLE `walkin_sessions`
 --
 ALTER TABLE `material_properties`
   ADD CONSTRAINT `material_properties_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`material_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `material_transactions`
+--
+ALTER TABLE `material_transactions`
+  ADD CONSTRAINT `material_transactions_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`material_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `orders`
