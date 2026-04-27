@@ -16,9 +16,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def fetch_data(query, params=None):
     try:
         conn = mysql.connector.connect(
-            host="localhost",
+            host="mysql",
             user="root",
-            password="",
+            password="root",
             database="my_db"
         )
 
