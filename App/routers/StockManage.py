@@ -77,6 +77,32 @@ def update_material(
 # =========================
 # 🔹 GET ALL MATERIALS
 # =========================
+# @router.get("/materials", response_model=list[MaterialResponse])
+# def get_all_materials(
+#     db: Session = Depends(get_db),
+#     user=Depends(require_role(["Staff", "Admin", "Owner"]))
+# ):
+#     materials = db.query(Material).all()
+
+#     result = []
+#     for m in materials:
+#         props = db.query(MaterialProperty).filter(
+#             MaterialProperty.material_id == m.material_id
+#         ).all()
+
+#         result.append({
+#             "material_id": m.material_id,
+#             "material_name": m.material_name,
+#             "category": m.category,
+#             "unit": m.unit,
+#             "price_per_unit": m.price_per_unit,
+#             "quantity": m.quantity,
+#             "threshold": m.threshold,
+#             "status": get_status(m),  # ✅ your logic reused
+#             "properties": props
+#         })
+
+#     return result
 @router.get("/materials", response_model=list[MaterialResponse])
 def get_all_materials(
     db: Session = Depends(get_db),
@@ -103,7 +129,6 @@ def get_all_materials(
         })
 
     return result
-
 # =========================
 # 🔹 GET ONE MATERIAL
 # =========================
