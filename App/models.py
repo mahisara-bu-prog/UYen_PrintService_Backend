@@ -128,7 +128,7 @@ class Order(Base):
 
     order_id = Column(Integer, primary_key=True, index=True)
 
-    user_id = Column(Integer, ForeignKey("customers.customer_id"))
+    user_id = Column(Integer, ForeignKey("customers.Customer_id"))
 
     file_path = Column(String(500))
     file_name = Column(String(255))
