@@ -223,7 +223,7 @@ class MaterialProperty(Base):
 
 class MaterialTransaction(Base):
     __tablename__ = "material_transactions"
-
+    __table_args__ = {'extend_existing': True}
     transaction_id = Column(Integer, primary_key=True, index=True)
 
     material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
