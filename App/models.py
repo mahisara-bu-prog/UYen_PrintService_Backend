@@ -2,7 +2,7 @@
 #!! For Database Work Only
 
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime ,ForeignKey,Text,Date ,DECIMAL ,TIMESTAMP 
+from sqlalchemy import Column, Integer, String, Boolean, DateTime ,ForeignKey,Text,Date ,DECIMAL ,TIMESTAMP ,Enum
 from sqlalchemy.sql import func
 from sqlalchemy.orm import declarative_base ,relationship
 from datetime import datetime, timezone,UTC
