@@ -201,29 +201,9 @@ class MaterialProperty(Base):
 
     material = relationship("Material", back_populates="properties")
 
-    __tablename__ = "material_transactions"
-
-    transaction_id = Column(Integer, primary_key=True, index=True)
-
-    material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
-
-    # ✅ now using username
-    username = Column(String(50), nullable=False)
-
-    action_type = Column(
-        Enum("withdraw", "receive", name="action_type_enum"),
-        nullable=False
-    )
-
-    amount = Column(Integer, nullable=False)
-    note = Column(Text)
-
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-
-
 class MaterialTransaction(Base):
     __tablename__ = "material_transactions"
-    #__table_args__ = {'extend_existing': True}
+
     transaction_id = Column(Integer, primary_key=True, index=True)
 
     material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
@@ -240,6 +220,27 @@ class MaterialTransaction(Base):
     note = Column(Text)
 
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
+
+
+# class MaterialTransaction(Base):
+#     __tablename__ = "material_transactions"
+#     #__table_args__ = {'extend_existing': True}
+#     transaction_id = Column(Integer, primary_key=True, index=True)
+
+#     material_id = Column(Integer, ForeignKey("materials.material_id"), nullable=False)
+
+#     # ✅ now using username
+#     username = Column(String(50), nullable=False)
+
+#     action_type = Column(
+#         Enum("withdraw", "receive", name="action_type_enum"),
+#         nullable=False
+#     )
+
+#     amount = Column(Integer, nullable=False)
+#     note = Column(Text)
+
+#     created_at = Column(DateTime, default=datetime.now(timezone.utc))
 
 # class MaterialTransaction(Base):
 #     __tablename__ = "material_transactions"
