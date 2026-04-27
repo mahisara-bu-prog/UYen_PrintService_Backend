@@ -33,8 +33,34 @@ def report_orders_by_date(start_date: str, end_date: str):
     return FileResponse(file_path, filename="orders_by_date.pdf")
 
 
+# @router.get("/orders-by-month")
+# def report_orders_by_month():
+
+#     query = """
+#         SELECT 
+#             DATE_FORMAT(order_received_date, '%Y-%m') as month,
+#             order_id,
+#             copy_amount,
+#             price_per_unit,
+#             (copy_amount * price_per_unit) AS total_price,
+#             status
+#         FROM orders
+#         ORDER BY month, order_received_date;
+#     """
+
+#     file_path = generate_pdf(
+#         query=query,
+#         title_text="Total Orders by Month",
+#         filename="orders_by_month.pdf"
+#     )
+
+#     return FileResponse(file_path, filename="orders_by_month.pdf")
 @router.get("/orders-by-month")
-def report_orders_by_month():
+def report_orders_by_month(month: str):
+    """
+    Example:
+    month = "2026-04"
+    """
 
     query = """
         SELECT 
@@ -45,17 +71,18 @@ def report_orders_by_month():
             (copy_amount * price_per_unit) AS total_price,
             status
         FROM orders
-        ORDER BY month, order_received_date;
+        WHERE DATE_FORMAT(order_received_date, '%Y-%m') = %s
+        ORDER BY order_received_date, order_id;
     """
 
     file_path = generate_pdf(
         query=query,
-        title_text="Total Orders by Month",
-        filename="orders_by_month.pdf"
+        title_text=f"Orders Report ({month})",
+        filename=f"orders_{month}.pdf",
+        params=(month,)
     )
 
-    return FileResponse(file_path, filename="orders_by_month.pdf")
-
+    return FileResponse(file_path, filename=f"orders_{month}.pdf")
 
 @router.get("/stockreport")
 def stock_report():

@@ -119,7 +119,7 @@ def update_customer(
         customer.Email = updated_data.Email
 
     if updated_data.Phone_no is not None:
-        customer.Phone_No = updated_data.phone_no
+        customer.Phone_No = updated_data.Phone_no
 
     if updated_data.username is not None: #! CustomerUpdate Has no attribute "username"
         existing = db.query(Customer).filter(Customer.username == updated_data.username).first()
