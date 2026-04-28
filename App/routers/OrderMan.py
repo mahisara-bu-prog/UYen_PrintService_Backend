@@ -344,7 +344,7 @@ def get_printing_queue(
 # 🔹 Complete Order
 # =========================
 @router.get("/queue/complete")
-def get_printing_queue(
+def get_complete_queue(
     db: Session = Depends(get_db),
     user=Depends(require_role(["Staff", "Admin", "Owner"]))
 ):
@@ -359,24 +359,6 @@ def get_printing_queue(
     )
 
     return orders
-
-# =========================
-# 🔹 Complete Order
-# =========================
-@router.get("/queue/printing")
-def get_printing_queue(
-    db: Session = Depends(get_db),
-    user=Depends(require_role(["Staff", "Admin", "Owner"]))
-):
-    orders = (
-        db.query(Order)
-        .filter(Order.status == "Cancelled" or Order.status == "Completed")
-        .order_by(Order.created_date.asc())
-        .all()
-    )
-
-    return orders
-
 
 
 # =========================
