@@ -340,11 +340,12 @@ def get_printing_queue(
 
     return orders
 
+
 # =========================
 # 🔹 Complete Order
 # =========================
 @router.get("/queue/complete")
-def get_complete_queue(
+def get_printing_queue(
     db: Session = Depends(get_db),
     user=Depends(require_role(["Staff", "Admin", "Owner"]))
 ):
@@ -359,7 +360,6 @@ def get_complete_queue(
     )
 
     return orders
-
 
 # =========================
 # 🔹 GET PAPER OPTIONS (FOR FRONTEND)
