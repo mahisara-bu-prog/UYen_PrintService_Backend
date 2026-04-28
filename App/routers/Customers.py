@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import DateTime
 import uuid
 from datetime import datetime, timedelta
 
@@ -29,7 +30,7 @@ def create_walkin_session(db: Session = Depends(get_db)):
 
     new_session = WalkinSession(
         session_token=token,
-        expires_at=datetime.utcnow() + timedelta(hours=2)
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=2)
     )
 
     db.add(new_session)
@@ -41,7 +42,30 @@ def create_walkin_session(db: Session = Depends(get_db)):
 # =========================
 # 🔹 Register Customer
 # =========================
-@router.post("/customer_reg", response_model=CustomerResponse)
+# @router.post("/customer_reg", response_model=CustomerResponse)
+# def create_customer(cust: CustomerCreate, db: Session = Depends(get_db)):
+
+#     if db.query(Customer).filter(Customer.Email == cust.email).first():
+#         raise HTTPException(status_code=400, detail="Email already registered")
+
+#     if db.query(Customer).filter(Customer.username == cust.username).first():
+#         raise HTTPException(status_code=400, detail="Username already taken")
+
+#     new_customer = Customer(
+#         NAME=cust.name,
+#         Email=cust.email,
+#         Phone_No=cust.phone_no,
+#         username=cust.username,
+#         password_hash=cust.password,  # ⚠️ plain text (temporary)
+#         suspended_status=True
+#     )
+
+#     db.add(new_customer)
+#     db.commit()
+#     db.refresh(new_customer)
+
+#     return new_customer
+
 def create_customer(cust: CustomerCreate, db: Session = Depends(get_db)):
 
     if db.query(Customer).filter(Customer.Email == cust.email).first():
@@ -56,7 +80,12 @@ def create_customer(cust: CustomerCreate, db: Session = Depends(get_db)):
         Phone_No=cust.phone_no,
         username=cust.username,
         password_hash=cust.password,  # ⚠️ plain text (temporary)
-        suspended_status=True
+        suspended_status=True,
+        created_date = Column(
+            DateTime,
+            nullable=False,
+            default=lambda: datetime.now(timezone.utc)
+        )
     )
 
     db.add(new_customer)

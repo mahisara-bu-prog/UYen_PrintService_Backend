@@ -52,7 +52,6 @@ class Customer(Base):
     username = Column(String(50))
     password = Column(String(200))
 """
-
 class Customer(Base):
     __tablename__ = "customers"
 
