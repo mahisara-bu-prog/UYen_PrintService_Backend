@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-YEN | รายงานข้อมูล</title>
+    <!-- Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Header -->
+        <div class="page-header report-header-container">
+            <h1 id="page-title" class="report-page-title">
+                รายงานข้อมูล</h1>
+
+            <div class="report-tabs">
+                <button class="report-tab-btn active" onclick="switchTab(1)"
+                    id="tab-btn-1">รายการรับงานพิมพ์ประจำวัน</button>
+                <button class="report-tab-btn" onclick="switchTab(2)" id="tab-btn-2">ยอดคงเหลือวัสดุคงคลัง</button>
+                <button class="report-tab-btn" onclick="switchTab(3)" id="tab-btn-3">ยอดขายประจำเดือน</button>
+            </div>
+        </div>
+
+        <!-- View 1: วันที่สั่งพิมพ์ -->
+        <div id="view-1" class="report-view active">
+            <div class="report-summary-bar">
+                <div class="report-summary-text">
+                    ออเดอร์ทั้งหมด <span class="report-summary-value">25</span> <span class="summary-divider">|</span>
+                    ยอดรวมทั้งหมด <span class="report-summary-value">1,700</span>
+                </div>
+                <button id="btn-print-1" class="btn-print"><span class="f-18">⬇</span>
+                    พิมพ์รายงานรายการรับงานพิมพ์ประจำวัน</button>
+            </div>
+
+            <div class="report-filter-row mb-15">
+                <span class="report-filter-label report-filter-label-std">วันที่ :</span>
+                <div class="report-date-container">
+                    <div class="report-relative-flex">
+                        <input type="text" id="report-date-1" class="report-date-input report-date-input-std" placeholder="วัน - เดือน - ปี">
+                        <span class="report-calendar-icon">📅</span>
+                    </div>
+                    <button onclick="resetReportDate1()" class="btn-report-reset">
+                        <span class="reset-icon">✕</span> รีเซ็ตปฏิทิน
+                    </button>
+                </div>
+            </div>
+
+            <div class="report-table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th class="w-20 report-th-left-padded">ผู้เข้ารับบริการ</th>
+                            <th class="w-15">วัสดุ</th>
+                            <th class="w-10">ประเภทวัสดุ</th>
+                            <th class="w-15">จำนวนชุด</th>
+                            <th class="w-15">ประเภทงานพิมพ์</th>
+                            <th class="w-10">เวลา</th>
+                            <th class="w-15">ยอดเงิน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via mock API -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- View 2: สต็อกวัสดุ -->
+        <div id="view-2" class="report-view">
+            <div class="report-summary-bar report-summary-bar-inline">
+                <div class="report-filter-row mb-0">
+                    <span class="fw-700 f-16">ประเภท</span>
+                    <select class="report-select report-select-std">
+                        <option>ทั้งหมด</option>
+                    </select>
+                    <label class="report-checkbox-label">
+                        <input type="checkbox" id="low-stock-checkbox" onchange="filterLowStock()" class="report-checkbox-std">
+                        เฉพาะรายการใกล้หมด
+                    </label>
+                </div>
+                <button id="btn-print-2" class="btn-print"><span class="f-18">⬇</span>
+                    พิมพ์รายงานยอดคงเหลือวัสดุคงคลัง</button>
+            </div>
+
+            <div class="report-table-wrapper mt-20">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th class="w-25">ชื่อวัสดุ</th>
+                            <th class="w-30">ประเภท</th>
+                            <th class="w-25">คงเหลือ</th>
+                            <th class="w-20">ราคาต่อหน่วย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via mock API -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- View 3: ยอดขายประจำเดือน -->
+        <div id="view-3" class="report-view">
+            <div class="report-summary-bar">
+                <div class="report-summary-text">
+                    จำนวนรายการทั้งหมด <span class="report-summary-value text-blue">83</span> <span
+                        class="summary-divider">|</span> ยอดขายต่อเดือน <span
+                        class="report-summary-value text-blue">17,000</span>
+                </div>
+                <button id="btn-print-3" class="btn-print"><span class="f-18">⬇</span> พิมพ์รายงานยอดขายประจำเดือน</button>
+            </div>
+
+            <div class="report-filter-row mb-15">
+                <span class="report-filter-label report-filter-label-std">เดือน :</span>
+                <div class="report-date-container">
+                    <div class="report-relative-flex">
+                        <input type="text" id="report-date-3" class="report-date-input report-date-input-std" placeholder="เดือน / ปี">
+                        <span class="report-calendar-icon">📅</span>
+                    </div>
+                    <button type="button" onclick="clearMonthlyFilter()" class="btn-report-reset">
+                        <span class="reset-icon">✕</span> รีเซ็ตปฏิทิน
+                    </button>
+                </div>
+            </div>
+
+            <div class="report-table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th class="w-30 report-th-left-wide-padded">วันที่</th>
+                            <th class="w-40">จำนวนรายการ</th>
+                            <th class="w-30">ยอดขายต่อวัน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via mock API -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script src="js/mock-api.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+
+</html>

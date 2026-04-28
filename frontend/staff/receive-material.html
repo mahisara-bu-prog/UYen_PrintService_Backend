@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-YEN | รับวัสดุ</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="dashboard-main receive-material-main">
+        <!-- Left Panel: Form -->
+        <aside class="receive-sidebar">
+            <h1 class="receive-title">รับวัสดุ</h1>
+
+            <div class="receive-form">
+                <div class="receive-form-group">
+                    <label>ชื่อผู้รับวัสดุ</label>
+                    <input type="text" id="receive-name" value="HyperDusX" class="receive-input disabled" readonly>
+                </div>
+
+                <div class="receive-form-group">
+                    <label>วัสดุที่รับ</label>
+                    <div class="custom-dropdown-container" id="container-receive-material">
+                        <div class="custom-dropdown-box" id="receive-material-display" onclick="toggleReceiveDropdown('list-receive-material')">เลือกวัสดุ</div>
+                        <ul class="custom-dropdown-list hidden" id="list-receive-material">
+                            <!-- JS will populate items -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="receive-form-group">
+                    <label>ชนิดวัสดุที่รับ</label>
+                    <div class="custom-dropdown-container" id="container-receive-subtype">
+                        <div class="custom-dropdown-box" id="receive-subtype-display" onclick="toggleReceiveDropdown('list-receive-subtype')">เลือกชนิดวัสดุ</div>
+                        <ul class="custom-dropdown-list hidden" id="list-receive-subtype">
+                            <!-- JS will populate items -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="receive-form-group">
+                    <label>ประเภทวัสดุที่รับ</label>
+                    <div class="custom-dropdown-container" id="container-receive-type">
+                        <div class="custom-dropdown-box" id="receive-type-display" onclick="toggleReceiveDropdown('list-receive-type')">เลือกประเภทวัสดุ</div>
+                        <ul class="custom-dropdown-list hidden" id="list-receive-type">
+                            <!-- JS will populate items -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="receive-form-group">
+                    <label>จำนวนที่รับ</label>
+                    <input type="text" id="receive-qty" value="0" class="receive-input blue-text"
+                        oninput="validateInteger(this); clearSingleFieldError(this); if(this.value > 1000) this.value = 1000;">
+                </div>
+
+                <div class="receive-form-group">
+                    <label>หมายเหตุ</label>
+                    <input type="text" id="receive-note" value="" class="receive-input red-text">
+                </div>
+
+                <div class="receive-form-group">
+                    <label>วันที่รับวัสดุ</label>
+                    <div class="calendar-widget">
+                        <div class="calendar-header">
+                            <span class="prev-month">&lt;</span>
+                            <span class="current-month">02 เมษายน 2569</span>
+                            <span class="next-month">&gt;</span>
+                        </div>
+                        <div class="calendar-grid" id="calendar-days">
+                            <!-- JS will generate calendar days here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-submit-receive" onclick="openConfirmModal()">รับวัสดุ</button>
+        </aside>
+
+        <!-- Right Panel: Table -->
+        <section class="receive-content receive-content-area">
+            <div class="mb-25">
+                <h1 class="receive-table-title">รายการรับวัสดุ</h1>
+            </div>
+
+            <div class="receive-table-container">
+                <table class="receive-table">
+                    <thead>
+                        <tr>
+                            <th class="w-15">ชื่อผู้รับ</th>
+                            <th class="w-15">วัสดุ</th>
+                            <th class="w-15">ชนิดวัสดุ</th>
+                            <th class="w-10">ประเภท</th>
+                            <th class="w-10">จำนวนที่รับ</th>
+                            <th class="w-20">วันที่รับ</th>
+                            <th class="w-15">หมายเหตุ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be injected by mock API -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <!-- Modals removed -->
+    <script src="js/mock-api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/receive-material.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-YEN | รับงานพิมพ์</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1.1">
+    <link rel="stylesheet" href="./css/styles.css?v=1.1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body class="theme-online"> <!-- Start with online theme by default -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="dashboard-main receive-print-main">
+        <div class="flex-between flex-middle-start mb-20">
+            <!-- Left: Title + Toggle -->
+            <div class="page-header mt-0">
+                <h1 class="page-title">รับงานพิมพ์</h1>
+                <div class="toggle-group">
+                    <button class="btn-toggle online active" onclick="setTheme('online')">งานพิมพ์</button>
+                    <button class="btn-toggle record" onclick="setTheme('record')">บันทึกงานพิมพ์</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="main-jobs-view">
+            <div class="filters-row">
+                <div class="filters-left">
+                    <div class="filter-group">
+                        <label>สถานะงานพิมพ์ :</label>
+                        <select id="statusFilter" class="filter-select" onchange="filterJobs()">
+                            <option value="ทั้งหมด">ทั้งหมด</option>
+                            <option value="รอพิมพ์เอกสาร">รอพิมพ์เอกสาร</option>
+                            <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                            <option value="ดำเนินการสำเร็จ">ดำเนินการสำเร็จ</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>วันที่สั่งพิมพ์ :</label>
+                        <div class="inline-flex-stretch gap-8">
+                            <div class="relative inline-flex-middle">
+                                <input type="text" id="dateFilter" class="filter-input pr-28 bg-white cursor-pointer box-border" placeholder="วัน - เดือน - ปี">
+                                <span class="absolute right-8 text-gray-muted pointer-none f-13">📅</span>
+                            </div>
+                            <button onclick="resetDateFilter()" class="btn-reset-outline">
+                                <span class="f-13 fw-bold lh-1">✕</span> รีเซ็ตปฏิทิน
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="jobs-container" id="jobs-list">
+                <!-- Jobs will be injected here by mock API -->
+            </div>
+        </div>
+
+        <!-- New View: Record Print -->
+        <div id="record-print-view" class="hidden">
+            <div class="record-container">
+                <!-- Left: Form -->
+                <div class="record-form-card">
+                    <h2 class="record-title">บันทึกงานพิมพ์หน้าร้าน</h2>
+                    <form id="record-form" class="record-form-grid" onsubmit="event.preventDefault(); showConfirmRecordModal();">
+                        <div class="input-group">
+                            <label>เลือกชนิดกระดาษ</label>
+                            <div class="select-wrapper">
+                                <select id="rec-paper-type" required>
+                                    <option value="" disabled selected hidden>ชนิดของกระดาษ</option>
+                                    <!-- Options will be populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>เลือกขนาดกระดาษ</label>
+                            <div class="select-wrapper">
+                                <select id="rec-paper-size" required>
+                                    <option value="" disabled selected hidden>ขนาดกระดาษ</option>
+                                    <!-- Options will be populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label>อัปโหลดไฟล์งานพิมพ์</label>
+                            <input type="file" id="rec-file" required style="padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; width: 100%; box-sizing: border-box; font-family: 'Prompt', sans-serif;">
+                        </div>
+
+                        <div class="input-group">
+                            <label>จำนวนชุด</label>
+                            <input type="number" id="rec-qty" placeholder="กรุณาใส่จำนวนชุด" required min="1" max="1000" onkeydown="return ['e', 'E', '+', '-'].includes(event.key) ? false : true">
+                        </div>
+
+                        <div class="input-group">
+                            <label>ยอดเงินรวม</label>
+                            <input type="number" id="rec-total" placeholder="กรุณาใส่ยอดเงินรวม" required min="1" max="99999" step="0.01" onkeydown="return ['e', 'E', '+', '-'].includes(event.key) ? false : true">
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label>หมายเหตุเพิ่มเติม</label>
+                            <textarea id="rec-note" placeholder="กรุณากรอกหมายเหตุ" maxlength="2000"></textarea>
+                        </div>
+
+                        <div class="record-form-footer">
+                            <button type="submit" class="btn-record-submit">บันทึกงานพิมพ์หน้าร้าน</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right: History -->
+                <div class="record-history-section">
+                    <h2 class="record-title">ประวัติรับงานพิมพ์หน้าร้าน</h2>
+                    <div class="history-filters mb-15">
+                        <div class="filter-group">
+                            <label>วันที่สั่งพิมพ์ :</label>
+                            <div class="inline-flex-stretch gap-8">
+                                <div class="relative inline-flex-middle">
+                                    <input type="text" id="historyDateFilter" class="filter-input pr-28 bg-white cursor-pointer box-border" placeholder="วัน - เดือน - ปี">
+                                    <span class="absolute right-8 text-gray-muted pointer-none f-13">📅</span>
+                                </div>
+                                <button onclick="resetHistoryDateFilter()" class="btn-reset-outline">
+                                    <span class="f-13 fw-bold lh-1">✕</span> รีเซ็ตปฏิทิน
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container history-table-container">
+                        <table class="data-table history-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-15">ชนิดวัสดุ</th>
+                                    <th class="w-20">ประเภทวัสดุ</th>
+                                    <th class="w-10">จำนวนชุด</th>
+                                    <th class="w-15">ยอดเงิน</th>
+                                    <th class="w-25">หมายเหตุ</th>
+                                    <th class="w-15">วันที่สั่งพิมพ์</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-tbody">
+                                <!-- History rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script src="js/mock-api.js"></script>
+    <script src="js/receive-print.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+
+</html>

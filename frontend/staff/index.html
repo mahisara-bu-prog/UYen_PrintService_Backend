@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-YEN | เข้าสู่ระบบ</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- นำเข้า Font 'Inter' และ 'Montserrat' จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="login-body">
+    <div class="container">
+        <div class="card">
+            <!-- ส่วนของโลโก้ -->
+            <div class="logo-section">
+                <img src="Item/Group%20466.png" alt="UYEN Logo" class="logo-img">
+                <div class="subtitle">
+                    <span class="line"></span>
+                    <span class="subtitle-text">FOR EMPLOYEE</span>
+                    <span class="line"></span>
+                </div>
+            </div>
+
+            <!-- ส่วนของแบบฟอร์ม -->
+            <form class="form">
+                <div class="input-group">
+                    <label>USERNAME</label>
+                    <input type="text" placeholder="" id="login-username" maxlength="50" oninput="validateUsername(this)">
+                </div>
+
+                <div class="input-group">
+                    <label>PASSWORD</label>
+                    <div class="password-wrapper">
+                        <input type="password" placeholder="" id="login-pwd" maxlength="100" minlength="5" oninput="validatePassword(this)">
+                        <span class="show-text" onclick="togglePassword('login-pwd', this)">SHOW</span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-primary" onclick="handleLogin()">LOGIN</button>
+            </form>
+
+            <!-- เส้นคั่นที่ปรากฎในหน้า Login -->
+            <hr class="divider">
+
+            <!-- ลิงก์สำหรับไปหน้าสมัครสมาชิก (ถูกลบออกแล้ว) -->
+        </div>
+    </div>
+
+    <!-- utils.js: showValidationError, togglePassword, validateUsername, validatePassword -->
+    <script src="js/mock-api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>

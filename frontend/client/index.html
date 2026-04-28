@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UYEN - Login</title>
+    <!-- Google Fonts for Thai/English typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for standard icons (like printer if needed, though we can use img) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <!-- Icon placeholder -->
+            <div class="auth-logo" style="margin-bottom: 0.5rem;">
+                <img src="./images/logo.png" alt="UYEN Logo" style="width: 200px; max-width: 100%; height: auto;">
+            </div>
+            
+            <div class="auth-subtitle">ENJOY PRINTING</div>
+            
+            <form id="loginForm" action="./dashboard.html">
+                <div class="form-group">
+                    <label class="form-label">USERNAME</label>
+                    <input type="text" class="form-control" name="username" id="usernameInput" oninput="validateUsername(this)" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">PASSWORD</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="passwordInput" oninput="validatePassword(this)" required>
+                        <button type="button" class="input-action" onclick="togglePassword('passwordInput', this)">SHOW</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-success" style="margin-top: 1rem;">LOGIN</button>
+            </form>
+            
+            <div class="auth-footer">
+                NOT HAVE ACCOUT ? <a href="./register.html">CREATE AN ACCOUNT HERE</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>

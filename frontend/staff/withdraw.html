@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-YEN | เบิกวัสดุ</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1.1">
+    <link rel="stylesheet" href="./css/styles.css?v=1.1">
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="dashboard-main withdraw-main">
+        <!-- Left Panel: Form -->
+        <aside class="withdraw-sidebar">
+            <h1 class="withdraw-title">เบิกวัสดุ</h1>
+
+            <div class="withdraw-form">
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">ชื่อผู้เบิกวัสดุ</label>
+                    <input type="text" id="withdrawer-name" value="HyperDusX" class="withdraw-input withdraw-input-readonly" readonly>
+                </div>
+
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">วัสดุ</label>
+                    <div class="custom-dropdown-container" id="container-withdraw-material">
+                        <div class="custom-dropdown-box blue-text withdraw-input-blue" id="withdraw-material-display" onclick="toggleWithdrawDropdown('list-withdraw-material')">เลือกวัสดุ</div>
+                        <ul class="custom-dropdown-list hidden" id="list-withdraw-material">
+                            <!-- JS will populate -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">ชนิดวัสดุ</label>
+                    <div class="custom-dropdown-container" id="container-withdraw-subtype">
+                        <div class="custom-dropdown-box blue-text withdraw-input-blue" id="withdraw-subtype-display" onclick="toggleWithdrawDropdown('list-withdraw-subtype')">เลือกชนิดวัสดุ</div>
+                        <ul class="custom-dropdown-list hidden" id="list-withdraw-subtype">
+                            <!-- JS will populate -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">ประเภทวัสดุ</label>
+                    <div class="custom-dropdown-container" id="container-withdraw-type">
+                        <div class="custom-dropdown-box blue-text withdraw-input-blue" id="withdraw-type-display" onclick="toggleWithdrawDropdown('list-withdraw-type')">เลือกประเภท</div>
+                        <ul class="custom-dropdown-list hidden" id="list-withdraw-type">
+                            <!-- JS will populate -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">จำนวนที่ต้องการเบิกวัสดุ</label>
+                    <input type="text" id="withdraw-qty" class="withdraw-input blue-text withdraw-input-blue"
+                        oninput="validateInteger(this); clearSingleFieldError(this); if(this.value > 1000) this.value = 1000; updateSummary()">
+                </div>
+
+                <div class="withdraw-form-group">
+                    <label class="withdraw-label-std">หมายเหตุ</label>
+                    <input type="text" id="withdraw-note" class="withdraw-input blue-text withdraw-input-blue">
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="withdraw-summary-section">
+                <h3 class="summary-title modal-title-confirm text-center mb-25">วัสดุที่เลือก</h3>
+                <div class="withdraw-summary-inner">
+                    <div class="summary-box summary-mat-box withdraw-summary-box mb-10" id="summary-mat-name">
+                        วัสดุ + ชนิดวัสดุ</div>
+                    <div class="summary-box summary-mat-box withdraw-summary-box mb-20" id="summary-mat-type" style="color: #6b7280; font-size: 13px;">
+                        ประเภทวัสดุ</div>
+                    <div class="summary-grid withdraw-summary-grid">
+                        <div class="summary-left withdraw-summary-item">
+                            <div class="summary-label withdraw-summary-label">คงเหลือ</div>
+                            <div class="summary-box summary-stock-box withdraw-stock-box" id="summary-stock">
+                                <div class="f-30 fw-700 lh-1">คลัง</div>
+                                <div class="unit-text f-20 fw-500 mt-4 text-blue">หน่วย</div>
+                            </div>
+                        </div>
+                        <div class="summary-right withdraw-summary-item">
+                            <div class="summary-label withdraw-summary-label">จำนวนที่เบิก</div>
+                            <div class="qty-display-box withdraw-qty-box" id="summary-qty">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-submit-withdraw btn-withdraw-action" onclick="openConfirmModal()">เบิกวัสดุ</button>
+            </div>
+        </aside>
+
+        <!-- Right Panel: Table -->
+        <section class="withdraw-content pl-30">
+            <div class="mb-25">
+                <h1 class="withdraw-table-title mb-15">รายการเบิกวัสดุ</h1>
+            </div>
+
+            <div class="withdraw-table-container">
+                <table class="data-table withdraw-table w-100 border-separate">
+                    <thead>
+                        <tr>
+                            <th class="w-15">ชื่อผู้เบิก</th>
+                            <th class="w-15">วัสดุ</th>
+                            <th class="w-15">ชนิดวัสดุ</th>
+                            <th class="w-15">ประเภท</th>
+                            <th class="w-10">จำนวนที่เบิก</th>
+                            <th class="w-15">วัน - เวลา</th>
+                            <th class="w-15">หมายเหตุ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via mock API -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Modals removed -->
+
+    <script src="js/mock-api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/withdraw.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+
+</html>
