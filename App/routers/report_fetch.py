@@ -85,15 +85,18 @@ def fetch_orders_by_month(start_month: str = None, end_month: str = None):
 def stock_report_json():
 
     query = """
-    SELECT 
-        material_id,
-        material_name,
-        category,
-        quantity,
-        unit,
-        price_per_unit,
-        updated_at
-    FROM materials
+        SELECT 
+            mt.transaction_id,
+            mt.material_id,
+            m.material_name,   
+            mt.username,
+            mt.action_type,
+            mt.amount,
+            mt.created_at
+        FROM material_transactions mt
+        JOIN materials m 
+            ON mt.material_id = m.material_id
+
     """
 
     columns, rows = fetch_data(query)
@@ -108,15 +111,21 @@ def stock_report_json():
 @router.get("/withdraw_report_fetch/")
 def stock_report_json():
 
-    query = """
-    SELECT transaction_id ,
-        material_id ,
-        username ,
-        action_type ,
-        amount, created_at
-    FROM material_transactions
-    WHERE action_type = 'withdraw'
-    """
+    query = query = """
+            SELECT 
+                mt.transaction_id,
+                mt.material_id,
+                m.material_name,
+                mt.username,
+                mt.action_type,
+                mt.amount,
+                mt.created_at
+            FROM material_transactions mt
+            JOIN materials m 
+                ON mt.material_id = m.material_id
+            WHERE mt.action_type = 'withdraw'
+            ORDER BY mt.created_at DESC
+            """
 
     columns, rows = fetch_data(query)
 
@@ -131,14 +140,20 @@ def stock_report_json():
 def stock_report_json():
 
     query = """
-    SELECT transaction_id ,
-        material_id ,
-        username ,
-        action_type ,
-        amount, created_at
-    FROM material_transactions
-    WHERE action_type = 'receive'
-    """
+            SELECT 
+                mt.transaction_id,
+                mt.material_id,
+                m.material_name,
+                mt.username,
+                mt.action_type,
+                mt.amount,
+                mt.created_at
+            FROM material_transactions mt
+            JOIN materials m 
+                ON mt.material_id = m.material_id
+            WHERE mt.action_type = 'receive'
+            ORDER BY mt.created_at DESC
+            """
 
     columns, rows = fetch_data(query)
 

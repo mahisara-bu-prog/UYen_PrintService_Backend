@@ -103,11 +103,24 @@ def stock_report():
 @router.get("/stock_transaction_report")
 def stock_report():
 
+    # query = """
+    # SELECT transaction_id ,material_id , username ,action_type ,amount, created_at
+    # FROM material_transactions
+    # """
     query = """
-    SELECT transaction_id ,material_id , username ,action_type ,amount, created_at
-    FROM material_transactions
-    """
+        SELECT 
+            mt.transaction_id,
+            mt.material_id,
+            m.material_name,   
+            mt.username,
+            mt.action_type,
+            mt.amount,
+            mt.created_at
+        FROM material_transactions mt
+        JOIN materials m 
+            ON mt.material_id = m.material_id
 
+    """
     file_path = generate_pdf(
         query=query,
         title_text="Withdraw/Recieve Report",
