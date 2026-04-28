@@ -68,7 +68,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend:/usr/share/nginx/html
+      - ./UYen_PrintService_Backend/frontend:/usr/share/nginx/html
     networks:
       - backend
 
