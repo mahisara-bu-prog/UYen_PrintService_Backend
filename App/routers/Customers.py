@@ -80,12 +80,7 @@ def create_customer(cust: CustomerCreate, db: Session = Depends(get_db)):
         Phone_No=cust.phone_no,
         username=cust.username,
         password_hash=cust.password,  # ⚠️ plain text (temporary)
-        suspended_status=True,
-        created_date = Column(
-            DateTime,
-            nullable=False,
-            default=lambda: datetime.now(timezone.utc)
-        )
+        suspended_status=True
     )
 
     db.add(new_customer)

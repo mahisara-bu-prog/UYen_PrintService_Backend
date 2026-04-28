@@ -62,8 +62,9 @@ class Customer(Base):
     username = Column(String(50), unique=True)
     password_hash = Column(String(200))
     suspended_status = Column(Boolean, default=False)
-    create_date = Column(DateTime)
-    last_modified = Column(DateTime)
+    #create_date = Column(DateTime)
+    create_date = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    last_modified = Column(DateTime,default=lambda: datetime.now(timezone.utc),onupdate=lambda: datetime.now(timezone.utc))
 
 # class Customer(Base):
 #     __tablename__ = "customers"
