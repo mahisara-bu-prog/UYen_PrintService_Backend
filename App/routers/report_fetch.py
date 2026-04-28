@@ -104,3 +104,47 @@ def stock_report_json():
         "total": len(data),
         "data": data
     }
+
+@router.get("/withdraw_report_fetch/")
+def stock_report_json():
+
+    query = """
+    SELECT transaction_id ,
+        material_id ,
+        username ,
+        action_type ,
+        amount, created_at
+    FROM material_transactions
+    WHERE action_type = 'withdraw'
+    """
+
+    columns, rows = fetch_data(query)
+
+    data = [dict(zip(columns, row)) for row in rows]
+
+    return {
+        "total": len(data),
+        "data": data
+    }
+
+@router.get("/receive_report_fetch/")
+def stock_report_json():
+
+    query = """
+    SELECT transaction_id ,
+        material_id ,
+        username ,
+        action_type ,
+        amount, created_at
+    FROM material_transactions
+    WHERE action_type = 'receive'
+    """
+
+    columns, rows = fetch_data(query)
+
+    data = [dict(zip(columns, row)) for row in rows]
+
+    return {
+        "total": len(data),
+        "data": data
+    }

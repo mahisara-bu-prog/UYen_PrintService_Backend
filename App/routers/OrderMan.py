@@ -146,6 +146,7 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from datetime import datetime ,timezone 
 import uuid, os, shutil
 
@@ -220,7 +221,7 @@ async def create_order(
             copy_amount=copy_amount,
             price_per_unit=price_per_unit,
             total_price=total_price,
-            status="pending",
+            status="Pending",
             order_received_date=datetime.now(timezone.utc),
             pickup_date=pickup_dt,
             note=note
@@ -329,12 +330,53 @@ def get_printing_queue(
 ):
     orders = (
         db.query(Order)
-        .filter(Order.status == "Printing")
+        .filter(or_(
+            Order.status == "Pending",
+            Order.status == "Printing"
+        ))
         .order_by(Order.created_date.asc())
         .all()
     )
 
     return orders
+
+# =========================
+# 🔹 Complete Order
+# =========================
+@router.get("/queue/complete")
+def get_printing_queue(
+    db: Session = Depends(get_db),
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
+):
+    orders = (
+        db.query(Order)
+        .filter(or_(
+            Order.status == "Completed",
+            Order.status == "Cancelled"
+        ))
+        .order_by(Order.created_date.asc())
+        .all()
+    )
+
+    return orders
+
+# =========================
+# 🔹 Complete Order
+# =========================
+@router.get("/queue/printing")
+def get_printing_queue(
+    db: Session = Depends(get_db),
+    user=Depends(require_role(["Staff", "Admin", "Owner"]))
+):
+    orders = (
+        db.query(Order)
+        .filter(Order.status == "Cancelled" or Order.status == "Completed")
+        .order_by(Order.created_date.asc())
+        .all()
+    )
+
+    return orders
+
 
 
 # =========================

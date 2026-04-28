@@ -99,3 +99,19 @@ def stock_report():
     )
 
     return FileResponse(file_path, filename="stock_report.pdf")
+
+@router.get("/stock_transaction_report")
+def stock_report():
+
+    query = """
+    SELECT transaction_id ,material_id , username ,action_type ,amount, created_at
+    FROM material_transactions
+    """
+
+    file_path = generate_pdf(
+        query=query,
+        title_text="Withdraw/Recieve Report",
+        filename="stock_transaction_report.pdf"
+    )
+
+    return FileResponse(file_path, filename="stock_transactions_report.pdf")
