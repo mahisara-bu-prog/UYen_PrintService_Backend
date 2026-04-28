@@ -65,7 +65,7 @@ def create_walkin_session(db: Session = Depends(get_db)):
 #     db.refresh(new_customer)
 
 #     return new_customer
-
+@router.post("/customer_reg", response_model=CustomerResponse)
 def create_customer(cust: CustomerCreate, db: Session = Depends(get_db)):
 
     if db.query(Customer).filter(Customer.Email == cust.email).first():
